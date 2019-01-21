@@ -8,11 +8,20 @@ import (
 )
 
 func main() {
+	args := os.Args
+	if len(args) < 3 {
+		log.Fatal("missing bucket name or file name")
+	}
+
 	var (
-		bucketName = os.Args[1]
-		fileName   = os.Args[2]
+		bucketName = args[1]
+		fileName   = args[2]
 	)
 
-	signedURL := generator.GenerateSignedURL(bucketName, fileName, 0)
-	log.Println("Signed URL:", signedURL)
+	signedURL, err := generator.GenerateSignedURL(bucketName, fileName, 0)
+	if err != nil {
+		log.Fatalf("could not generate signed URL: %v", err)
+	}
+
+	log.Println("signed URL:", signedURL)
 }
